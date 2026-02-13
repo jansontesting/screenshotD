@@ -1,16 +1,21 @@
 import chromium from '@sparticuz/chromium';
 import puppeteer from 'puppeteer-core';
 
-// Vercel Serverless Function config
+// Force Node.js runtime (NOT Edge — Chromium requires it)
+export const runtime = 'nodejs';
 export const maxDuration = 60;
 export const dynamic = 'force-dynamic';
 
 async function getBrowser() {
+    // Configure chromium for serverless
+    chromium.setHeadlessMode = true;
+    chromium.setGraphicsMode = false;
+
     const executablePath = await chromium.executablePath();
 
     const browser = await puppeteer.launch({
         args: chromium.args,
-        defaultViewport: null,
+        defaultViewport: chromium.defaultViewport,
         executablePath,
         headless: chromium.headless,
     });
