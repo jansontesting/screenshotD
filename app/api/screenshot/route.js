@@ -1,4 +1,4 @@
-import chromium from '@sparticuz/chromium-min';
+import chromium from '@sparticuz/chromium';
 import puppeteer from 'puppeteer-core';
 
 // Force Node.js runtime (NOT Edge — Chromium requires it)
@@ -6,18 +6,14 @@ export const runtime = 'nodejs';
 export const maxDuration = 60;
 export const dynamic = 'force-dynamic';
 
-// Chromium binary pack hosted on GitHub releases — downloaded at runtime
-const CHROMIUM_PACK_URL =
-    'https://github.com/Sparticuz/chromium/releases/download/v143.0.4/chromium-v143.0.4-pack.x64.tar';
-
 async function getBrowser() {
-    const executablePath = await chromium.executablePath(CHROMIUM_PACK_URL);
+    const executablePath = await chromium.executablePath();
 
     const browser = await puppeteer.launch({
         args: chromium.args,
-        defaultViewport: { width: 1280, height: 800 },
+        defaultViewport: chromium.defaultViewport,
         executablePath,
-        headless: true,
+        headless: chromium.headless,
     });
 
     return browser;
